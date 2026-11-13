@@ -331,51 +331,5 @@ runTests(() => {
   }
 });
 
-// ============ Bug report: defect life cycle ============
-const lcSteps = document.querySelectorAll('.lc-step');
-const lozenges = document.querySelectorAll('[data-status-lozenge]');
-const activity = document.querySelectorAll('.bug-activity li');
-const STATUSES = [
-  { name: 'New', cls: 's-new' },
-  { name: 'Open', cls: 's-open' },
-  { name: 'Fixed', cls: 's-fixed' },
-  { name: 'Closed', cls: 's-closed' },
-];
-let lcTimer = null;
-
-function setStatus(i) {
-  lcSteps.forEach((s, k) => {
-    s.classList.toggle('done', k < i || (i === STATUSES.length - 1 && k === i));
-    s.classList.toggle('current', k === i && i !== STATUSES.length - 1);
-  });
-  lozenges.forEach(l => { l.textContent = STATUSES[i].name; l.className = 'lozenge ' + STATUSES[i].cls; });
-  activity.forEach(a => a.classList.toggle('shown', Number(a.dataset.step) <= i));
-}
-
-function playLifecycle() {
-  clearTimeout(lcTimer);
-  if (reduceMotion) { setStatus(STATUSES.length - 1); return; }
-  let i = 0;
-  setStatus(0);
-  (function step() {
-    if (i >= STATUSES.length - 1) return;
-    lcTimer = setTimeout(() => { setStatus(++i); step(); }, 1300);
-  })();
-}
-
-if (lcSteps.length) {
-  setStatus(0);
-  lcSteps.forEach((s, k) => s.querySelector('button').addEventListener('click', () => {
-    clearTimeout(lcTimer);
-    setStatus(k);
-  }));
-  document.getElementById('lcReplay').addEventListener('click', playLifecycle);
-
-  const lcObserver = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) { playLifecycle(); lcObserver.disconnect(); }
-  }, { threshold: 0.4 });
-  lcObserver.observe(document.getElementById('lifecycle'));
-}
-
 // ============ Footer year ============
 document.getElementById('year').textContent = new Date().getFullYear();
