@@ -31,6 +31,7 @@
         <a href="#experience">Experience</a>
         <a href="#skills">Skills</a>
         <a href="#projects">Projects</a>
+        <a href="#bug-report">Bug Report</a>
         <!-- Research is hidden until the paper is published. Uncomment this link together with the #research section below. -->
         <!-- <a href="#research">Research</a> -->
         <a href="#certifications">Certifications</a>
@@ -86,13 +87,19 @@
         </div>
 
         <!-- Test-runner terminal -->
-        <div class="terminal reveal" aria-label="Animated test run summary">
+        <div class="terminal reveal" id="terminalWrap" aria-label="Interactive terminal">
           <div class="terminal-bar">
             <span class="tdot r"></span><span class="tdot y"></span><span class="tdot g"></span>
             <span class="terminal-title">ahinsa@portfolio: ~/qa</span>
+            <span class="term-badge" id="termBadge" hidden>⌨ interactive</span>
           </div>
-          <pre class="terminal-body" id="terminal"><span class="t-prompt">$</span> npx playwright test --project=ahinsa
-</pre>
+          <div class="terminal-screen" id="termScreen">
+            <pre class="terminal-body" id="terminal" aria-live="polite"></pre>
+            <div class="term-input-line" id="termInputLine" hidden>
+              <span class="t-prompt">$</span>
+              <input id="termInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Type a terminal command, for example help" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -116,8 +123,8 @@
             <p>
               I recently completed a <strong>BSc in Industrial Information Technology</strong> at
               <strong>Uva Wellassa University of Sri Lanka</strong> (CGPA 3.73 / 4.00), and I'm currently a
-              <strong>QA Engineer Intern at Derana Macro Labs</strong>, where I do manual, functional, regression and
-              API testing in an Agile team.
+              <strong>QA Engineer Intern at Derana Macro Labs</strong>, where I do manual, functional and regression
+              testing in an Agile team.
             </p>
             <p>
               I like taking a feature apart to find out how it fails, then writing tests so it doesn't fail that way
@@ -407,11 +414,158 @@
       </div>
     </section>
 
-    <!-- ============ CERTIFICATIONS ============ -->
-    <section class="section" id="certifications">
+    <!-- ============ BUG REPORT ============ -->
+    <!-- This is an EXAMPLE defect. You can replace it with one of your real defects from the Toolshop project. -->
+    <section class="section" id="bug-report">
       <div class="container">
         <div class="section-head reveal">
-          <span class="section-tag">05 · certifications</span>
+          <span class="section-tag">05 · bug report</span>
+          <h2>How I report a bug</h2>
+          <p class="section-sub">An example defect written the way I log them in Jira: clear, reproducible and backed by evidence. Watch it move through the defect life cycle.</p>
+        </div>
+
+        <div class="lifecycle reveal" id="lifecycle">
+          <ol class="lc-steps">
+            <li class="lc-step" data-step="0"><button type="button"><span class="lc-dot">1</span><span class="lc-label">New</span></button></li>
+            <li class="lc-step" data-step="1"><button type="button"><span class="lc-dot">2</span><span class="lc-label">Open</span></button></li>
+            <li class="lc-step" data-step="2"><button type="button"><span class="lc-dot">3</span><span class="lc-label">Fixed</span></button></li>
+            <li class="lc-step" data-step="3"><button type="button"><span class="lc-dot">4</span><span class="lc-label">Closed</span></button></li>
+          </ol>
+          <button type="button" class="lc-replay" id="lcReplay" aria-label="Replay defect life cycle">↻ Replay</button>
+        </div>
+
+        <article class="bug-card reveal">
+          <header class="bug-header">
+            <div class="bug-crumbs">
+              <span class="bug-icon" aria-hidden="true"></span>
+              <span>TOOLSHOP</span><span class="sep">/</span><strong>TS-142</strong>
+              <span class="sample-tag">Example report</span>
+            </div>
+            <h3 class="bug-summary">Cart accepts zero and negative quantities, producing a negative cart total</h3>
+            <div class="bug-header-meta">
+              <span class="lozenge s-new" data-status-lozenge>New</span>
+              <span class="pill sev">Severity: Major</span>
+              <span class="pill pri">Priority: High</span>
+            </div>
+          </header>
+
+          <div class="bug-body">
+            <div class="bug-main">
+              <section class="bug-sec">
+                <h4>Description</h4>
+                <p>The <strong>Quantity</strong> field on the Cart page has no lower-bound validation. Entering <code>0</code> or a negative number is accepted by both the UI and the API, and the line total and cart total become negative. The user can still click <em>Proceed to checkout</em>.</p>
+              </section>
+
+              <section class="bug-sec">
+                <h4>Environment</h4>
+                <ul class="env">
+                  <li><span>URL</span>practicesoftwaretesting.com</li>
+                  <li><span>Browsers</span>Chrome (latest), Firefox (latest)</li>
+                  <li><span>OS</span>Windows 11</li>
+                  <li><span>User</span>Logged-in customer account</li>
+                </ul>
+              </section>
+
+              <section class="bug-sec">
+                <h4>Steps to reproduce</h4>
+                <ol class="steps">
+                  <li>Go to <code>practicesoftwaretesting.com</code> and log in with a valid customer account.</li>
+                  <li>Open any product (e.g. <em>Combination Pliers</em>) and click <strong>Add to cart</strong>.</li>
+                  <li>Open the <strong>Cart</strong> page.</li>
+                  <li>Clear the <strong>Quantity</strong> field, enter <code>-2</code> and press <kbd>Tab</kbd>.</li>
+                  <li>Check the line total, the cart total and the <em>Proceed to checkout</em> button.</li>
+                </ol>
+              </section>
+
+              <div class="exp-act">
+                <section class="exp">
+                  <h4>✓ Expected result</h4>
+                  <ul>
+                    <li>Quantity below <code>1</code> is rejected (minimum = 1).</li>
+                    <li>A validation message is shown: “Quantity must be at least 1”.</li>
+                    <li>Totals stay unchanged and checkout is blocked.</li>
+                  </ul>
+                </section>
+                <section class="act">
+                  <h4>✗ Actual result</h4>
+                  <ul>
+                    <li>Quantity <code>-2</code> is accepted without any message.</li>
+                    <li>Line total and cart total show <strong>-$28.30</strong>.</li>
+                    <li><em>Proceed to checkout</em> is still enabled.</li>
+                  </ul>
+                </section>
+              </div>
+
+              <section class="bug-sec">
+                <h4>Boundary values tested</h4>
+                <div class="bva">
+                  <div class="bva-cell fail"><code>-1</code><span>✗ accepted</span></div>
+                  <div class="bva-cell fail"><code>0</code><span>✗ accepted</span></div>
+                  <div class="bva-cell pass"><code>1</code><span>✓ ok</span></div>
+                  <div class="bva-cell pass"><code>2</code><span>✓ ok</span></div>
+                </div>
+              </section>
+
+              <section class="bug-sec">
+                <h4>Attachments &amp; evidence</h4>
+                <div class="evidence">
+                  <figure class="shot">
+                    <div class="shot-bar"><i></i><i></i><i></i><em>practicesoftwaretesting.com/checkout</em></div>
+                    <div class="shot-body">
+                      <div class="shot-row head"><span>Item</span><span>Qty</span><span>Total</span></div>
+                      <div class="shot-row"><span>Combination Pliers</span><span class="shot-qty">-2</span><span class="neg">-$28.30</span></div>
+                      <div class="shot-total">Cart total <strong class="neg">-$28.30</strong></div>
+                      <div class="shot-btn">Proceed to checkout</div>
+                    </div>
+                    <figcaption>📎 cart_negative_qty.png</figcaption>
+                  </figure>
+                  <figure class="log">
+<pre><span class="t-info">PUT</span> /carts/{cartId}/product/quantity
+<span class="t-dim">Request</span>
+{ "product_id": "01H…", "quantity": -2 }
+
+<span class="t-dim">Response</span>
+<span class="t-warn">200 OK</span>  <span class="t-dim">← expected 422 Unprocessable Entity</span></pre>
+                    <figcaption>📎 network_log.txt</figcaption>
+                  </figure>
+                </div>
+              </section>
+
+              <section class="bug-sec">
+                <h4>Activity</h4>
+                <ul class="bug-activity">
+                  <li data-step="0"><span class="av">AA</span><div><strong>Ahinsa Arunodi</strong> created the issue <span class="lozenge s-new">New</span><p>Logged with steps, evidence and linked test case TC-CART-014.</p></div></li>
+                  <li data-step="1"><span class="av dev">DL</span><div><strong>Dev Lead</strong> triaged and assigned it to the Dev Team <span class="lozenge s-open">Open</span><p>Confirmed reproducible. Scheduled for the current sprint.</p></div></li>
+                  <li data-step="2"><span class="av dev">DV</span><div><strong>Developer</strong> pushed a fix <span class="lozenge s-fixed">Fixed</span><p>Added <code>min=1</code> validation in the UI and a 422 response in the API.</p></div></li>
+                  <li data-step="3"><span class="av">AA</span><div><strong>Ahinsa Arunodi</strong> retested and closed it <span class="lozenge s-closed">Closed</span><p>Confirmation test passed on Chrome &amp; Firefox. Regression suite green.</p></div></li>
+                </ul>
+              </section>
+            </div>
+
+            <aside class="bug-side">
+              <dl>
+                <div><dt>Status</dt><dd><span class="lozenge s-new" data-status-lozenge>New</span></dd></div>
+                <div><dt>Issue type</dt><dd>🐞 Bug</dd></div>
+                <div><dt>Severity</dt><dd><span class="pill sev">Major</span></dd></div>
+                <div><dt>Priority</dt><dd><span class="pill pri">↑ High</span></dd></div>
+                <div><dt>Reporter</dt><dd>Ahinsa Arunodi</dd></div>
+                <div><dt>Assignee</dt><dd>Dev Team</dd></div>
+                <div><dt>Component</dt><dd>Cart / Checkout</dd></div>
+                <div><dt>Test case</dt><dd><code>TC-CART-014</code></dd></div>
+                <div><dt>Technique</dt><dd>Boundary Value Analysis</dd></div>
+                <div><dt>Labels</dt><dd class="labels"><span>functional</span><span>validation</span><span>regression</span></dd></div>
+              </dl>
+            </aside>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ CERTIFICATIONS ============ -->
+    <section class="section alt" id="certifications">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-tag">06 · certifications</span>
           <h2>Certifications</h2>
         </div>
         <div class="cert-grid">
@@ -452,11 +606,11 @@
     </section>
 
     <!-- ============ ACHIEVEMENTS & LEADERSHIP ============ -->
-    <section class="section alt" id="achievements">
+    <section class="section" id="achievements">
       <div class="container two-col">
         <div>
           <div class="section-head reveal">
-            <span class="section-tag">06 · achievements</span>
+            <span class="section-tag">07 · achievements</span>
             <h2>Achievements</h2>
           </div>
           <ul class="list-cards">
@@ -469,7 +623,7 @@
         </div>
         <div>
           <div class="section-head reveal">
-            <span class="section-tag">07 · leadership</span>
+            <span class="section-tag">08 · leadership</span>
             <h2>Leadership &amp; volunteering</h2>
           </div>
           <ul class="list-cards">
@@ -486,7 +640,7 @@
     <section class="section" id="contact">
       <div class="container">
         <div class="contact-card reveal">
-          <span class="section-tag">08 · contact</span>
+          <span class="section-tag">09 · contact</span>
           <h2>Let's build quality together</h2>
           <p>I'm open to QA / Quality Engineering roles and internships. If you have a role, a project, or just want to talk testing, get in touch.</p>
           <div class="contact-links">
