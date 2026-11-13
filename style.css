@@ -379,6 +379,32 @@ strong { color: var(--text); font-weight: 600; }
 @media (max-width: 900px) { .cert-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 600px) { .cert-grid { grid-template-columns: 1fr; } }
 
+/* Research */
+.research-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 32px; box-shadow: var(--shadow); border-top: 3px solid var(--accent);
+}
+.research-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.research-status {
+  font-family: "JetBrains Mono", monospace; font-size: .74rem; font-weight: 700;
+  padding: 4px 10px; border-radius: 6px;
+  background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--warn);
+}
+.research-card h3 { font-size: 1.35rem; margin-bottom: 14px; }
+.research-abstract { color: var(--text-soft); margin-bottom: 26px; }
+.research-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.rf-step { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.rf-num {
+  width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px;
+  background: var(--accent); color: #fff; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: .85rem;
+  margin-bottom: 10px;
+}
+.rf-step h4 { font-size: .95rem; margin-bottom: 6px; }
+.rf-step p { font-size: .84rem; color: var(--text-muted); }
+.research-links { margin-top: 22px; }
+@media (max-width: 900px) { .research-flow { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .research-flow { grid-template-columns: 1fr; } .research-card { padding: 22px; } }
+
 /* Achievements / leadership */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
 .list-cards { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
